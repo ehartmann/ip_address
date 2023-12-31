@@ -15,27 +15,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
+import QtLocation 5.9
+import QtPositioning 5.9
 import QtQuick 2.2
 import QtQuick.Controls 1.1 as QtControls
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
-
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-
-import QtLocation 5.9
-import QtPositioning 5.9
-
 import "js/index.js" as ExternalJS
-
+import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.plasmoid 2.0
 
 Item {
     id: fullRoot
-
-    Layout.preferredWidth: grid.width
-    Layout.preferredHeight: grid.height
 
     readonly property bool layoutRow: plasmoid.configuration.layoutRow
     readonly property bool showHostname: plasmoid.configuration.showHostname
@@ -45,72 +38,79 @@ Item {
     readonly property string labelColor: plasmoid.configuration.labelColor
     readonly property bool useLinkThemeColor: plasmoid.configuration.useLinkThemeColor
     readonly property string linkColor: plasmoid.configuration.linkColor
-
     // property string mapLink: "https://www.openstreetmap.org/#map=" + mapZoomLevel + "/" + latitude + "/" + longitude
     property string mapLink: "https://www.openstreetmap.org/?mlat=" + latitude + "&mlon=" + longitude + "#map=" + mapZoomLevel + "/" + latitude + "/" + longitude
 
     function addMarker(latitude, longitude) {
-        debug_print("### addMarker init")
-        var component = Qt.createComponent("Marker.qml")
-        if( component.status != Component.Ready )
-        {
-            if( component.status == Component.Error )
-                debug_print("### Error creating Marker:"+ component.errorString() );
-            return; // or maybe throw
+        debug_print("### addMarker init");
+        var component = Qt.createComponent("Marker.qml");
+        if (component.status != Component.Ready) {
+            if (component.status == Component.Error)
+                debug_print("### Error creating Marker:" + component.errorString());
+
+            return ; // or maybe throw
         }
         // removing previous markers
-        my_map.clearMapItems()
-        var item = component.createObject(
-                        grid, {
-                            coordinate: QtPositioning.coordinate(latitude, longitude)
-                        })
-        my_map.addMapItem(item)
-        debug_print("### Added Marker: lat=" + latitude + "; long=" + longitude)
+        my_map.clearMapItems();
+        var item = component.createObject(grid, {
+            "coordinate": QtPositioning.coordinate(latitude, longitude)
+        });
+        my_map.addMapItem(item);
+        debug_print("### Added Marker: lat=" + latitude + "; long=" + longitude);
     }
-    
+
+    Layout.preferredWidth: grid.width
+    Layout.preferredHeight: grid.height
+
     GridLayout {
         id: grid
+
         rowSpacing: 10
         columnSpacing: 10
         flow: layoutRow ? GridLayout.LeftToRight : GridLayout.TopToBottom
 
         Item {
+            // anchors.horizontalCenter: layoutRow ? undefined : parent.horizontalCenter
+
             width: mapSize
             height: width
             // // Fix issue https://github.com/Davide-sd/ip_address/issues/8
             Layout.alignment: layoutRow ? Qt.AlignLeft : Qt.AlignHCenter
-            // anchors.horizontalCenter: layoutRow ? undefined : parent.horizontalCenter
 
             Plugin {
-                id: mapPlugin
-                name: "osm" // "mapboxgl", "esri", ...
                 // locales: ["it_IT","en_US"]
-
                 // PluginParameter { name: "osm.useragent"; value: "My great Qt OSM application" }
                 // PluginParameter { name: "osm.mapping.host"; value: "http://osm.tile.server.address/" }
                 // PluginParameter { name: "osm.mapping.copyright"; value: "All mine" }
                 // PluginParameter { name: "osm.routing.host"; value: "http://osrm.server.address/viaroute" }
                 // PluginParameter { name: "osm.geocoding.host"; value: "http://geocoding.server.address" }
+
+                id: mapPlugin
+
+                name: "osm" // "mapboxgl", "esri", ...
             }
 
             Map {
                 id: my_map
+
                 anchors.fill: parent
                 plugin: mapPlugin
                 center: {
                     if (jsonData !== undefined) {
-                        addMarker(latitude, longitude)
-                        return QtPositioning.coordinate(latitude, longitude)
+                        addMarker(latitude, longitude);
+                        return QtPositioning.coordinate(latitude, longitude);
                     }
-                    addMarker(41.8902, 12.4922)
-                    return QtPositioning.coordinate(41.8902, 12.4922) // Rome
+                    addMarker(41.8902, 12.4922);
+                    return QtPositioning.coordinate(41.8902, 12.4922); // Rome
                 }
                 zoomLevel: mapZoomLevel
             }
+
         }
 
         GridLayout {
             id: labelsContainer
+
             flow: GridLayout.LeftToRight
             columns: 2
             Layout.minimumWidth: 300
@@ -199,9 +199,12 @@ Item {
                     hoverEnabled: false
                     onClicked: Qt.openUrlExternally(mapLink)
                 }
+
             }
 
             QtControls.Button {
+                // abortTooLongConnection()
+
                 Layout.columnSpan: 2
                 // Fix issue https://github.com/Davide-sd/ip_address/issues/8
                 Layout.alignment: Qt.AlignHCenter
@@ -209,11 +212,13 @@ Item {
                 Layout.preferredWidth: parent.width
                 text: i18n("Update")
                 onClicked: {
-                    debug_print("### [Update onClicked]")
-                    root.reloadData()
-                    // abortTooLongConnection()
+                    debug_print("### [Update onClicked]");
+                    root.reloadData();
                 }
             }
+
         }
+
     }
+
 }

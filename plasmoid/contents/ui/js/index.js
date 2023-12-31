@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 function getIPdata(successCallback, failureCallback) {
     // append /json to the end to force json data response
     var getUrl = "https://ipinfo.io/json"

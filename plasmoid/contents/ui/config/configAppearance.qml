@@ -18,15 +18,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0 as QtControls
 import QtQuick.Controls.Styles 1.0
-import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.2
+import QtQuick.Layouts 1.0
 
 ColumnLayout {
     id: appearancePage
-
-    Layout.minimumWidth: parent.width
-    Layout.maximumWidth: parent.width
-    Layout.preferredWidth: parent.width
 
     // property alias cfg_widgetIconSize: widgetIconSizeCombo.currentIndex
     // property alias cfg_updateInterval: updateIntervalSpin.value
@@ -41,12 +37,15 @@ ColumnLayout {
     property alias cfg_useLinkThemeColor: linkThemeColorCheckBox.checked
     property alias cfg_linkColor: linkColorRectangle.color
 
+    Layout.minimumWidth: parent.width
+    Layout.maximumWidth: parent.width
+    Layout.preferredWidth: parent.width
+
     QtControls.GroupBox {
         Layout.fillWidth: true
         title: i18n("Map configurations")
 
         ColumnLayout {
-
             RowLayout {
                 QtControls.Label {
                     text: i18n('Map Size:')
@@ -54,12 +53,14 @@ ColumnLayout {
 
                 QtControls.SpinBox {
                     id: mapSizeSpin
+
                     minimumValue: 50
                     maximumValue: 500
                     decimals: 0
                     stepSize: 1
                     suffix: ' px'
                 }
+
             }
 
             RowLayout {
@@ -69,14 +70,18 @@ ColumnLayout {
 
                 QtControls.SpinBox {
                     id: mapZoomLevelSpin
+
                     minimumValue: 0
                     maximumValue: 19
                     decimals: 0
                     stepSize: 1
                     suffix: ''
                 }
+
             }
+
         }
+
     }
 
     QtControls.GroupBox {
@@ -84,19 +89,27 @@ ColumnLayout {
         title: i18n("Layout")
 
         ColumnLayout {
-            QtControls.ExclusiveGroup { id: displayOrderGroup }
+            QtControls.ExclusiveGroup {
+                id: displayOrderGroup
+            }
+
             QtControls.RadioButton {
                 id: layoutRow
+
                 text: i18n('Use horizontal layout')
                 exclusiveGroup: displayOrderGroup
             }
+
             QtControls.RadioButton {
                 id: layoutColumn
+
                 text: i18n('Use vertical layout')
                 checked: !layoutRow.checked
                 exclusiveGroup: displayOrderGroup
             }
+
         }
+
     }
 
     QtControls.GroupBox {
@@ -105,6 +118,7 @@ ColumnLayout {
 
         GridLayout {
             id: labelsContainer
+
             flow: GridLayout.LeftToRight
             columns: 2
             Layout.minimumWidth: 300
@@ -113,15 +127,17 @@ ColumnLayout {
 
             QtControls.CheckBox {
                 id: labelThemeColorCheckBox
+
                 text: i18n("Use Label Theme Color")
             }
 
             QtControls.Button {
                 enabled: !labelThemeColorCheckBox.checked
-                onClicked: labelColorDialog.open();
+                onClicked: labelColorDialog.open()
 
                 Rectangle {
                     id: labelColorRectangle
+
                     x: 4
                     y: 4
                     width: parent.width - 8
@@ -129,19 +145,22 @@ ColumnLayout {
                     color: cfg_labelColor
                     border.width: 0
                 }
+
             }
 
             QtControls.CheckBox {
                 id: linkThemeColorCheckBox
+
                 text: i18n("Use Links Theme Color")
             }
 
             QtControls.Button {
                 enabled: !linkThemeColorCheckBox.checked
-                onClicked: linkColorDialog.open();
+                onClicked: linkColorDialog.open()
 
                 Rectangle {
                     id: linkColorRectangle
+
                     x: 4
                     y: 4
                     width: parent.width - 8
@@ -149,17 +168,22 @@ ColumnLayout {
                     color: cfg_linkColor
                     border.width: 0
                 }
+
             }
+
         }
+
     }
 
     ColorDialog {
         id: labelColorDialog
+
         onAccepted: cfg_labelColor = this.color
     }
 
     ColorDialog {
         id: linkColorDialog
+
         onAccepted: cfg_linkColor = this.color
     }
 
@@ -169,11 +193,15 @@ ColumnLayout {
 
         QtControls.CheckBox {
             id: showHostname
+
             text: i18n("Show host name")
         }
+
     }
 
-    Item { // tighten layout
+    // tighten layout
+    Item {
         Layout.fillHeight: true
     }
+
 }

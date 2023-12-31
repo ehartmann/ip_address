@@ -19,29 +19,30 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1 as QtControls
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
-
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.plasmoid 2.0
 
 QtControls.Label {
-
     id: label
+
     color: fullRoot.useLinkThemeColor ? theme.highlightColor : fullRoot.linkColor2
     font.bold: true
     Layout.fillWidth: true
     wrapMode: Text.Wrap
 
     MouseArea {
+        // executable.exec("notify-send 'Copied " + label.text + " to clipboard'")
+
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: false
         onClicked: {
-            debug_print("### [MouseArea onClicked -> Copying to clipboard]")
-            executable.exec("qdbus org.kde.klipper /klipper setClipboardContents " + label.text)
-            executable.exec("notify-send 'Copied " + label.text + " to clipboard' -a 'Public IP Address widget'")
-            // executable.exec("notify-send 'Copied " + label.text + " to clipboard'")
+            debug_print("### [MouseArea onClicked -> Copying to clipboard]");
+            executable.exec("qdbus org.kde.klipper /klipper setClipboardContents " + label.text);
+            executable.exec("notify-send 'Copied " + label.text + " to clipboard' -a 'Public IP Address widget'");
         }
     }
+
 }

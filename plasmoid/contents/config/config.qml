@@ -29,4 +29,5 @@ ConfigModel {
         icon: "applications-graphics"
         source: "config/configAppearance.qml"
     }
+
 }

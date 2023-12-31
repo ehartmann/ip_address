@@ -17,15 +17,11 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 1.0 as QtControls
-import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.2
+import QtQuick.Layouts 1.0
 
 ColumnLayout {
     id: configPage
-
-    Layout.minimumWidth: parent.width
-    Layout.maximumWidth: parent.width
-    Layout.preferredWidth: parent.width
 
     property alias cfg_widgetIconSize: widgetIconSizeCombo.currentIndex
     property alias cfg_updateInterval: updateIntervalSpin.value
@@ -36,10 +32,15 @@ ColumnLayout {
     property alias cfg_showVPNIcon: showVPNIcon.checked
     property alias cfg_vpnKeywords: vpnKeywordsEdit.text
 
+    Layout.minimumWidth: parent.width
+    Layout.maximumWidth: parent.width
+    Layout.preferredWidth: parent.width
+
     QtControls.GroupBox {
+        // flat: true
+
         Layout.fillWidth: true
         title: i18n("IP Address")
-        // flat: true
 
         ColumnLayout {
             RowLayout {
@@ -49,12 +50,14 @@ ColumnLayout {
 
                 QtControls.SpinBox {
                     id: updateIntervalSpin
+
                     minimumValue: 2
                     maximumValue: 60
                     decimals: 0
                     stepSize: 1
                     suffix: ' min'
                 }
+
             }
 
             RowLayout {
@@ -64,8 +67,10 @@ ColumnLayout {
 
                 QtControls.ComboBox {
                     id: widgetIconSizeCombo
+
                     model: ["Default", "Tiny", "Small", "Small-Medium", "Medium", "Large", "Huge", "Enormous"]
                 }
+
             }
 
             RowLayout {
@@ -75,35 +80,43 @@ ColumnLayout {
 
                 QtControls.SpinBox {
                     id: fontSizeSpin
+
                     minimumValue: 10
                     maximumValue: 200
                     decimals: 0
                     stepSize: 5
                     suffix: ' %'
                 }
+
             }
 
             QtControls.CheckBox {
                 id: showWidgetLabel
+
                 text: i18n("Display the label alongside the widget icon")
             }
 
             QtControls.CheckBox {
                 id: showFlagInCompact
+
                 text: i18n("Display Country flag in widget icon")
             }
 
             QtControls.CheckBox {
                 id: showIPInCompact
+
                 text: i18n("Display IP address next to widget icon")
             }
+
         }
+
     }
 
     QtControls.GroupBox {
+        // flat: true
+
         Layout.fillWidth: true
         title: i18n("VPN Status (Experimental feature)")
-        // flat: true
 
         ColumnLayout {
             QtControls.Label {
@@ -114,6 +127,7 @@ ColumnLayout {
 
             QtControls.CheckBox {
                 id: showVPNIcon
+
                 text: i18n("Display the VPN status icon")
             }
 
@@ -123,14 +137,19 @@ ColumnLayout {
 
             QtControls.TextField {
                 id: vpnKeywordsEdit
+
                 width: 300
                 focus: true
                 selectByMouse: true
             }
+
         }
+
     }
 
-    Item { // tighten layout
+    // tighten layout
+    Item {
         Layout.fillHeight: true
     }
+
 }
