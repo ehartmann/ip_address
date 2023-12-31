@@ -113,9 +113,9 @@ Item {
 
             flow: GridLayout.LeftToRight
             columns: 2
-            Layout.minimumWidth: 300
-            Layout.maximumWidth: 300
-            Layout.preferredWidth: 300
+            Layout.minimumWidth: 600
+            Layout.maximumWidth: 600
+            Layout.preferredWidth: 600
 
             QtControls.Label {
                 text: i18n("IP address:")
