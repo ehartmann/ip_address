@@ -23,7 +23,7 @@ TODO:
 	the map will be centered on the last known position, not in the marker
 */
 
-import QtQuick 2.2
+import QtQuick 2.12
 import QtQuick.Controls 1.1 as QtControls
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
@@ -72,19 +72,21 @@ Item {
     property string prevVPNstatus: "unknown"
     property string curVPNstatus: "unknown"
     property int countSeconds: 1
+    property int countRequests: 3
     property bool runTimer: true
     property bool debug: true
+    readonly property Timer myTimeoutTimer: Qt.createQmlObject("import QtQuick 2.2; Timer {interval: 5000; repeat: false; running: false;}", root, "MyTimeoutTimer");
 
     function getIPdata(successCallback, failureCallback) {
         // append /json to the end to force json data response
         var getUrl = "https://ipinfo.io/json";
+
         debug_print("### [getIPdata] attempting request");
         try {
             var request = new XMLHttpRequest();
             request.open('GET', getUrl);
             // QML XMLHttpRequest doesn't have ontimeout. Need to create a
             // custom timer to simulate it.
-            var myTimeoutTimer = Qt.createQmlObject("import QtQuick 2.2; Timer {interval: 5000; repeat: false; running: true;}", root, "MyTimeoutTimer");
 
             myTimeoutTimer.triggered.connect(function() {
                 debug_print("### [getIPdata] request TIMEOUT");
@@ -94,10 +96,18 @@ Item {
                 // requests are going to timeout. Keep sending them until one
                 // is successful.
                 // TODO: is there any better approach???
-                getIPdata(successCallback, failureCallback);
+
+                root.countRequests = root.countRequests - 1;
+                if (root.countRequests > 0) {
+                    getIPdata(successCallback, failureCallback);
+                } else {
+                    root.countRequests = 3;
+                }
             });
+            myTimeoutTimer.running = true;
 
             request.onreadystatechange = function() {
+                myTimeoutTimer.running = false;
                 if (request.readyState !== XMLHttpRequest.DONE)
                     return ;
 
@@ -107,10 +117,10 @@ Item {
                 }
                 var jsonData = JSON.parse(request.responseText);
                 // remember to stop the timeout timer
-                myTimeoutTimer.running = false;
                 successCallback(jsonData);
             };
             request.send();
+            myTimeoutTimer.running = false;
             return request;
         } catch (err) {
             debug_print("### [getIPdata] Error" + JSON.stringify(err, null, 4));
@@ -245,7 +255,7 @@ Item {
             executable_vpn.exec("nmcli c show --active | grep -E '" + vpnKeywords + "'");
             if (prevVPNstatus != curVPNstatus) {
                 debug_print("### [timer_vpn.onTriggered] detected change, sending request");
-                setTimeout(reloadData(), 1000);
+                // setTimeout(reloadData(), 1000);
             }
         }
     }
