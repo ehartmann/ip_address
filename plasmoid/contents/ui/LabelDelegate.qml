@@ -16,18 +16,19 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1 as QtControls
-import QtQuick.Layouts 1.1
-import QtQuick.Window 2.1
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.plasmoid 2.0
+import QtQuick.Controls as QtControls
+import QtQuick.Layouts 
+import QtQuick.Window
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.extras as PlasmaExtras
+import org.kde.plasma.plasmoid 
+import org.kde.kirigami as Kirigami
 
 QtControls.Label {
     id: label
 
-    color: fullRoot.useLinkThemeColor ? theme.highlightColor : fullRoot.linkColor2
+    color: fullRoot.useLinkThemeColor ? Kirigami.Theme.highlightColor : fullRoot.linkColor2
     font.bold: true
     Layout.fillWidth: true
     wrapMode: Text.Wrap

@@ -18,14 +18,15 @@
 import QtLocation 5.9
 import QtPositioning 5.9
 import QtQuick 2.2
-import QtQuick.Controls 1.1 as QtControls
-import QtQuick.Layouts 1.1
+import QtQuick.Controls as QtControls
+import QtQuick.Layouts 2.1
 import QtQuick.Window 2.1
 import "js/index.js" as ExternalJS
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.plasmoid 2.0
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.extras as PlasmaExtras
+import org.kde.plasma.plasmoid
+import org.kde.kirigami as Kirigami
 
 Item {
     id: fullRoot
@@ -119,7 +120,7 @@ Item {
 
             QtControls.Label {
                 text: i18n("IP address:")
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
             }
 
             LabelDelegate {
@@ -128,7 +129,7 @@ Item {
 
             QtControls.Label {
                 text: i18n("Country:")
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
             }
 
             LabelDelegate {
@@ -137,7 +138,7 @@ Item {
 
             QtControls.Label {
                 text: i18n("Region:")
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
             }
 
             LabelDelegate {
@@ -146,7 +147,7 @@ Item {
 
             QtControls.Label {
                 text: i18n("Postal Code:")
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
             }
 
             LabelDelegate {
@@ -155,7 +156,7 @@ Item {
 
             QtControls.Label {
                 text: i18n("City:")
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
             }
 
             LabelDelegate {
@@ -164,7 +165,7 @@ Item {
 
             QtControls.Label {
                 text: i18n("Coordinates:")
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
             }
 
             LabelDelegate {
@@ -173,7 +174,7 @@ Item {
 
             QtControls.Label {
                 text: i18n("Hostname:")
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
                 visible: showHostname
             }
 
@@ -187,7 +188,7 @@ Item {
                 // Fix issue https://github.com/Davide-sd/ip_address/issues/8
                 Layout.alignment: Qt.AlignHCenter
                 // anchors.horizontalCenter: parent.horizontalCenter
-                color: useLinkThemeColor ? theme.highlightColor : linkColor
+                color: useLinkThemeColor ? Kirigami.Theme.highlightColor : linkColor
                 font.bold: true
                 wrapMode: Text.Wrap
                 text: jsonData !== undefined ? i18n("Open map in the browser") : "N/A"

@@ -15,11 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 1.0 as QtControls
-import QtQuick.Controls.Styles 1.0
-import QtQuick.Dialogs 1.2
-import QtQuick.Layouts 1.0
+import QtQuick
+import QtQuick.Controls as QtControls
+import QtQuick.Dialogs
+import QtQuick.Layouts
 
 ColumnLayout {
     id: appearancePage
@@ -54,11 +53,12 @@ ColumnLayout {
                 QtControls.SpinBox {
                     id: mapSizeSpin
 
-                    minimumValue: 50
-                    maximumValue: 800
-                    decimals: 0
+                    from: 50
+                    to: 800
                     stepSize: 1
-                    suffix: ' px'
+                    textFromValue: function(value, locale) {
+                        return (qsTr("%1 px").arg(value));
+                    }
                 }
 
             }
@@ -71,11 +71,9 @@ ColumnLayout {
                 QtControls.SpinBox {
                     id: mapZoomLevelSpin
 
-                    minimumValue: 0
-                    maximumValue: 19
-                    decimals: 0
+                    from: 0
+                    to: 19
                     stepSize: 1
-                    suffix: ''
                 }
 
             }
@@ -89,15 +87,10 @@ ColumnLayout {
         title: i18n("Layout")
 
         ColumnLayout {
-            QtControls.ExclusiveGroup {
-                id: displayOrderGroup
-            }
-
             QtControls.RadioButton {
                 id: layoutRow
 
                 text: i18n('Use horizontal layout')
-                exclusiveGroup: displayOrderGroup
             }
 
             QtControls.RadioButton {
@@ -105,7 +98,6 @@ ColumnLayout {
 
                 text: i18n('Use vertical layout')
                 checked: !layoutRow.checked
-                exclusiveGroup: displayOrderGroup
             }
 
         }

@@ -15,10 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 1.0 as QtControls
-import QtQuick.Dialogs 1.2
-import QtQuick.Layouts 1.0
+import QtQuick
+import QtQuick.Controls as QtControls
+import QtQuick.Dialogs
+import QtQuick.Layouts
 
 ColumnLayout {
     id: configPage
@@ -51,11 +51,12 @@ ColumnLayout {
                 QtControls.SpinBox {
                     id: updateIntervalSpin
 
-                    minimumValue: 2
-                    maximumValue: 60
-                    decimals: 0
+                    from: 2
+                    to: 60
                     stepSize: 1
-                    suffix: ' min'
+                    textFromValue: function(value, locale) {
+                        return (qsTr("%1 min").arg(value));
+                    }
                 }
 
             }
@@ -81,11 +82,12 @@ ColumnLayout {
                 QtControls.SpinBox {
                     id: fontSizeSpin
 
-                    minimumValue: 10
-                    maximumValue: 200
-                    decimals: 0
+                    from: 10
+                    to: 200
                     stepSize: 5
-                    suffix: ' %'
+                    textFromValue: function(value, locale) {
+                            return (qsTr("%1 %").arg(value));
+                    }
                 }
 
             }

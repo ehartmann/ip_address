@@ -23,17 +23,20 @@ TODO:
 	the map will be centered on the last known position, not in the marker
 */
 
-import QtQuick 2.12
-import QtQuick.Controls 1.1 as QtControls
-import QtQuick.Layouts 1.1
+import QtQuick 2.15
+import QtQuick.Controls 2.1 as QtControls
+import QtQuick.Layouts 2.1
 import QtQuick.Window 2.1
 import "js/index.js" as ExternalJS
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.plasmoid 2.0
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.extras as PlasmaExtras
+import org.kde.plasma.plasmoid 
+import org.kde.plasma.plasma5support as Plasma5Support
+import org.kde.ksvg as KSvg
+import org.kde.kirigami as Kirigami
 
-Item {
+PlasmoidItem {
     // // NOTE: can't use this approach because it doesn't update the values when
     // // a vpn change is detected. Why? who knows?!?!?
     // PlasmaCore.DataSource {
@@ -74,7 +77,7 @@ Item {
     property int countSeconds: 1
     property int countRequests: 3
     property bool runTimer: true
-    property bool debug: true
+    property bool debug: false
     readonly property Timer myTimeoutTimer: Qt.createQmlObject("import QtQuick 2.2; Timer {interval: 5000; repeat: false; running: false;}", root, "MyTimeoutTimer");
 
     function getIPdata(successCallback, failureCallback) {
@@ -165,11 +168,11 @@ Item {
         return Qt.resolvedUrl("../icons/1x1/" + country + ".svg");
     }
 
-    Plasmoid.switchWidth: units.gridUnit * 10
-    Plasmoid.switchHeight: units.gridUnit * 12
+    switchWidth: Kirigami.Units.gridUnit * 10
+    switchHeight: Kirigami.Units.gridUnit * 12
 
     // used to execute "send notification commands"
-    PlasmaCore.DataSource {
+    Plasma5Support.DataSource {
         id: executable
 
         signal exited(int exitCode, int exitStatus, string stdout, string stderr)
@@ -183,7 +186,7 @@ Item {
     }
 
     // used to execute query commands for vpn checks
-    PlasmaCore.DataSource {
+    Plasma5Support.DataSource {
         id: executable_vpn
 
         signal exited(int exitCode, int exitStatus, string stdout, string stderr)
@@ -194,7 +197,7 @@ Item {
 
         engine: "executable"
         connectedSources: []
-        onNewData: {
+        onNewData: (sourceName, data) => {
             // debug_print("### [executable onNewData] exitCode: " + exitCode)
             // debug_print("### [executable onNewData] exitStatus: " + exitStatus)
             // debug_print("### [executable onNewData] stdout: " + stdout)
@@ -260,17 +263,17 @@ Item {
         }
     }
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: vpn_svg
 
         imagePath: Qt.resolvedUrl("../icons/vpn-shield-off.svg")
     }
 
-    Plasmoid.compactRepresentation: MouseArea {
+    compactRepresentation: MouseArea {
         id: compactRoot
 
         // Taken from DigitalClock to ensure uniform sizing when next to each other
-        readonly property bool tooSmall: plasmoid.formFactor === PlasmaCore.Types.Horizontal && Math.round(2 * (compactRoot.height / 5)) <= theme.smallestFont.pixelSize
+        readonly property bool tooSmall: plasmoid.formFactor === PlasmaCore.Types.Horizontal && Math.round(2 * (compactRoot.height / 5)) <= Kirigami.Theme.smallestFont.pixelSize
         readonly property int fontSize: plasmoid.configuration.fontSize
         readonly property bool showWidgetLabel: plasmoid.configuration.showWidgetLabel
 
@@ -292,17 +295,17 @@ Item {
             anchors.centerIn: parent
             flow: isVertical ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 id: icon
 
-                Layout.minimumWidth: units.iconSizes.tiny
-                Layout.minimumHeight: units.iconSizes.tiny
-                Layout.maximumWidth: units.iconSizes.enormous
-                Layout.maximumHeight: units.iconSizes.enormous
+                Layout.minimumWidth: Kirigami.Units.iconSizes.small
+                Layout.minimumHeight: Kirigami.Units.iconSizes.small
+                Layout.maximumWidth: Kirigami.Units.iconSizes.enormous
+                Layout.maximumHeight: Kirigami.Units.iconSizes.enormous
                 Layout.preferredWidth: ExternalJS.getIconSize(widgetIconSize, compactRoot)
                 Layout.preferredHeight: Layout.preferredWidth
 
-                svg: PlasmaCore.Svg {
+                svg: KSvg.Svg {
                     id: svg
 
                     imagePath: getIconPath(false)
@@ -311,7 +314,7 @@ Item {
             }
 
             QtControls.Label {
-                color: useLabelThemeColor ? theme.textColor : labelColor
+                color: useLabelThemeColor ? Kirigami.Theme.textColor : labelColor
                 text: {
                     if (!showFlagInCompact) {
                         if (showIPInCompact)
@@ -331,19 +334,19 @@ Item {
                     if (isVertical)
                         return undefined;
                     else
-                        return tooSmall ? theme.defaultFont.pixelSize : units.roundToIconSize(units.gridUnit * 2) * fontSize / 100;
+                        return tooSmall ? Kirigami.Theme.defaultFont.pixelSize :Kirigami.Units.iconSizes.roundedIconSize(Kirigami.Units.gridUnit * 2) * fontSize / 100;
                 }
-                minimumPointSize: theme.smallestFont.pointSize
+                minimumPointSize: Kirigami.Units.iconSizes.small
                 visible: showWidgetLabel
             }
 
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 id: vpn_icon
 
-                Layout.minimumWidth: units.iconSizes.tiny
-                Layout.minimumHeight: units.iconSizes.tiny
-                Layout.maximumWidth: units.iconSizes.enormous
-                Layout.maximumHeight: units.iconSizes.enormous
+                Layout.minimumWidth: Kirigami.Units.iconSizes.small
+                Layout.minimumHeight: Kirigami.Units.iconSizes.small
+                Layout.maximumWidth: Kirigami.Units.iconSizes.enormous
+                Layout.maximumHeight: Kirigami.Units.iconSizes.enormous
                 Layout.preferredWidth: ExternalJS.getIconSize(widgetIconSize, compactRoot)
                 Layout.preferredHeight: Layout.preferredWidth
                 visible: showVPNIcon
@@ -372,7 +375,7 @@ Item {
 
     }
 
-    Plasmoid.fullRepresentation: FullRepresentation {
+    fullRepresentation: FullRepresentation {
     }
 
 }

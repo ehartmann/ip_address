@@ -12,18 +12,17 @@
         "Description[it]": "Mostra l'indirizzo IP pubblico e lo stato VPN",
         "Description[nl]": "Toon je openbare ip-adres en de vpn-status",
         "Icon": "globe.svg",
-        "Id": "com.github.davide-sd.ip_address",
+        "Id": "com.github.davide-sd.ipaddress",
         "License": "GPL-2.0+",
         "Name": "Public IP Address",
         "Name[en_GB]": "Public IP Address",
         "Name[it]": "Indirizzo IP pubblico",
         "Name[nl]": "Openbaar ip-adres",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "1.2.7",
         "Website": "https://github.com/Davide-sd"
     },
+    "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-KDE-ParentApp": "",
+    "KPackageStructure": "Plasma/Applet"
 }
